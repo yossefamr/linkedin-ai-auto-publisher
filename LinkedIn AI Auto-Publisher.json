@@ -1,0 +1,172 @@
+﻿{
+  "name": "LinkedIn AI Auto-Publisher",
+  "type": "SHARED",
+  "summary": "",
+  "description": "",
+  "tags": [],
+  "blogUrl": "",
+  "metadata": {
+    "externalId": "jXE6XWZlGM2mNGPzKZozN"
+  },
+  "author": "yossef amr",
+  "categories": [],
+  "pieces": [
+    "@activepieces/piece-schedule",
+    "@activepieces/piece-open-router",
+    "@activepieces/piece-linkedin"
+  ],
+  "flows": [
+    {
+      "displayName": "LinkedIn AI Auto-Publisher",
+      "trigger": {
+        "name": "trigger",
+        "valid": true,
+        "displayName": "Every Day",
+        "nextAction": {
+          "name": "step_4",
+          "skip": false,
+          "type": "CODE",
+          "valid": true,
+          "settings": {
+            "input": {},
+            "sampleData": {},
+            "sourceCode": {
+              "code": "export const code = async (inputs) => {\n  const topics = [\n    \"معاناة المبرمجين اليومية والـ Bugs والفرونت إند (بأسلوب كوميدي ساخر/ميمز كلامية)\",\n    \"نصيحة عملية سريعة في الـ Frontend أو الـ JavaScript من واقع التجربة\",\n    \"سؤال تفاعلي للكوميونيتي عن البرمجة أو الفريلانس عشان الناس تتناقش في الكومنتات\",\n    \"موقف طريف أو تجربة واقعية مع العبث بتاع الـ CSS وتظبيط الـ Layouts\"\n  ];\n  \n  const randomTopic = topics[Math.floor(Math.random() * topics.length)];\n  return { selectedTopic: randomTopic };\n};",
+              "packageJson": "{}"
+            },
+            "errorHandlingOptions": {
+              "retryOnFailure": {
+                "value": false
+              },
+              "continueOnFailure": {
+                "value": false
+              }
+            }
+          },
+          "nextAction": {
+            "name": "step_1",
+            "skip": false,
+            "type": "PIECE",
+            "valid": true,
+            "settings": {
+              "input": {
+                "auth": "{{connections['nLIQnkQMHEV8OvSnMrlcR']}}",
+                "model": "openai/gpt-4o-mini",
+                "prompt": "\"اكتب بوست لينكد إن قصير ومبتكر بالعامية المصرية السلسة عن: {{step_4['output']['selectedTopic']}}.\nالشروط:\nاسلوب الكتابة يكون شخصي جداً كأن مبرمج فرونت إند حقيقي بيتكلم عن يومه أو معاناته مع الشغل والـ Bugs.\nبلاش نهائياً لغة رسمية، وبلاش جمل الـ AI المشهورة زي (في عالم التكنولوجيا المتسارع / يسعدني أن أشارككم / التفكير خارج الصندوق).\nلو موضوع كوميدي أو ميم، اكتب الموقف نفسه بأسلوب حكاية طريفة أو ميم مصاغ بالكلام (Text-based meme) بدون كلمة 'ميم'.\nقسم البوست لسطور قصيرة عشان يكون سهل في القرائية واعمل إيموجيز بسيطة وبدون مبالغة.\nاختم البوست بسؤال بسيط أو 3 هاشتاجات عربية وإنجليزي متداولة في مصر (زي: #برمجة #Frontend #Developers).\nاخرج النص النهائي فوراً بدون أي مقدمات أو شروحات.\"",
+                "maxTokens": "800"
+              },
+              "pieceName": "@activepieces/piece-open-router",
+              "actionName": "ask-lmm",
+              "sampleData": {},
+              "pieceVersion": "0.1.8",
+              "propertySettings": {
+                "topP": {
+                  "type": "MANUAL"
+                },
+                "model": {
+                  "type": "MANUAL"
+                },
+                "prompt": {
+                  "type": "MANUAL"
+                },
+                "maxTokens": {
+                  "type": "MANUAL"
+                },
+                "temperature": {
+                  "type": "MANUAL"
+                }
+              },
+              "errorHandlingOptions": {
+                "retryOnFailure": {
+                  "value": false
+                },
+                "continueOnFailure": {
+                  "value": false
+                }
+              }
+            },
+            "nextAction": {
+              "name": "step_2",
+              "skip": false,
+              "type": "PIECE",
+              "valid": true,
+              "settings": {
+                "input": {
+                  "auth": "{{connections['iKacuPyk5NjPPD6KJ2gnW']}}",
+                  "text": "{{step_1['output']}}",
+                  "visibility": "PUBLIC"
+                },
+                "pieceName": "@activepieces/piece-linkedin",
+                "actionName": "create_share_update",
+                "sampleData": {},
+                "pieceVersion": "0.2.8",
+                "propertySettings": {
+                  "link": {
+                    "type": "MANUAL"
+                  },
+                  "text": {
+                    "type": "MANUAL"
+                  },
+                  "imageUrl": {
+                    "type": "MANUAL"
+                  },
+                  "linkTitle": {
+                    "type": "MANUAL"
+                  },
+                  "visibility": {
+                    "type": "MANUAL"
+                  },
+                  "linkDescription": {
+                    "type": "MANUAL"
+                  }
+                },
+                "errorHandlingOptions": {
+                  "retryOnFailure": {
+                    "value": false
+                  },
+                  "continueOnFailure": {
+                    "value": false
+                  }
+                }
+              },
+              "displayName": "Create Share Update",
+              "lastUpdatedDate": "2026-08-12T23:21:31.063Z"
+            },
+            "displayName": "Ask LLM",
+            "lastUpdatedDate": "2026-08-12T23:21:31.063Z"
+          },
+          "displayName": "Code",
+          "lastUpdatedDate": "2026-08-12T23:21:31.062Z"
+        },
+        "lastUpdatedDate": "2026-08-12T23:21:31.062Z",
+        "type": "PIECE_TRIGGER",
+        "settings": {
+          "sampleData": {},
+          "propertySettings": {
+            "timezone": {
+              "type": "MANUAL"
+            },
+            "hour_of_the_day": {
+              "type": "MANUAL"
+            },
+            "run_on_weekends": {
+              "type": "MANUAL"
+            }
+          },
+          "pieceName": "@activepieces/piece-schedule",
+          "pieceVersion": "0.1.21",
+          "triggerName": "every_day",
+          "input": {
+            "timezone": "Africa/Cairo",
+            "hour_of_the_day": 8,
+            "run_on_weekends": false
+          }
+        }
+      },
+      "valid": true,
+      "schemaVersion": "23",
+      "notes": []
+    }
+  ],
+  "status": "PUBLISHED"
+}
